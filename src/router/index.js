@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import HomeView from "../views/HomeView.vue";
+import HomeView from "../views/main/HomeView.vue";
 
 Vue.use(VueRouter);
 
@@ -11,23 +11,47 @@ const routes = [
     component: HomeView,
   },
   {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
-  {
     path: "/login",
     name: "login",
-    component: () => import("../views/LoginView.vue"),
+    component: () => import("../views/login/LoginView.vue"),
+    children: [],
   },
   {
-    path: "/home",
-    name: "logintest",
-    component: () => import("../views/LoginTestView.vue"),
+    path: "/login/detail",
+    name: "loginDetail",
+    component: () => import("../views/login/LoginDetailView.vue"),
+  },
+  {
+    path: "/article",
+    name: "article",
+    component: () => import("../views/article/ArticleView.vue"),
+    children: [
+      {
+        path: "",
+        name: "articleList",
+        component: () => import("../views/article/ArticleListView.vue"),
+      },
+      {
+        path: "detail/:id",
+        name: "articleDetail",
+        component: () => import("../views/article/ArticleDetailView.vue"),
+      },
+      {
+        path: "write/:id?",
+        name: "articleWrite",
+        component: () => import("../views/article/ArticleWriteView.vue"),
+      },
+    ],
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: () => import("../views/settings/SettingView.vue"),
+  },
+  {
+    path: "/profile/:id",
+    name: "profile",
+    component: () => import("../views/profile/ProfileView.vue"),
   },
 ];
 
