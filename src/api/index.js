@@ -1,15 +1,11 @@
 import axios from "axios";
-const axiosService = axios.create({
-  baseURL: "http://localhost:8080/",
-});
+import {setInterceptors} from "./common/interceptors";
 
-const axiosKakaoService = axios.create({
-  baseURL: "https://kauth.kakao.com/",
-});
-
-function doSocialLogin(code) {
-  const url = `auth/login`;
-  return axiosService.get(url, {params: {code: code}});
+function createInstance() {
+  const axiosInstance = axios.create({
+    baseURL: "http://localhost:8080",
+  });
+  return setInterceptors(axiosInstance);
 }
 
-export {doSocialLogin};
+export const instance = createInstance();
