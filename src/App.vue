@@ -1,13 +1,16 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/login">Login</router-link>
-    </nav>
+    <rw-header></rw-header>
     <router-view />
+    <rw-footer></rw-footer>
   </div>
 </template>
 <script>
-export default {};
+import RwFooter from "./components/layouts/rw-footer/RWFooter.vue";
+import RwHeader from "./components/layouts/rw-header/RWHeader.vue";
+export default {
+  components: {RwHeader, RwFooter},
+};
 </script>
 
 <style lang="scss">
