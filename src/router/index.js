@@ -4,6 +4,22 @@ import HomeView from "../views/main/HomeView.vue";
 
 Vue.use(VueRouter);
 
+const getPreviousUrl = () => (to, from, next) => {
+  if (to.query.requireAuth != undefined) {
+    to.query.previous = to.query.requireAuth;
+  } else {
+    to.query.previous = from.fullPath;
+  }
+  return next(to.query);
+};
+
+const requireAuth = () => (to, from, next) => {
+  if (localStorage.token != null || localStorage.token != undefined) {
+    return next();
+  }
+  return next({path: "/login", query: {requireAuth: to.fullPath}});
+};
+
 const routes = [
   {
     path: "/",
@@ -15,6 +31,7 @@ const routes = [
     name: "login",
     component: () => import("../views/login/LoginView.vue"),
     children: [],
+    beforeEnter: getPreviousUrl(),
   },
   {
     path: "/login/detail",
@@ -27,11 +44,6 @@ const routes = [
     component: () => import("../views/article/ArticleView.vue"),
     children: [
       {
-        path: "",
-        name: "articleList",
-        component: () => import("../views/article/ArticleListView.vue"),
-      },
-      {
         path: "detail/:id",
         name: "articleDetail",
         component: () => import("../views/article/ArticleDetailView.vue"),
@@ -40,6 +52,7 @@ const routes = [
         path: "write/:id?",
         name: "articleWrite",
         component: () => import("../views/article/ArticleWriteView.vue"),
+        beforeEnter: requireAuth(),
       },
     ],
   },
@@ -47,6 +60,7 @@ const routes = [
     path: "/settings",
     name: "settings",
     component: () => import("../views/settings/SettingView.vue"),
+    beforeEnter: requireAuth(),
   },
   {
     path: "/profile/:id",
